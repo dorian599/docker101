@@ -1,5 +1,7 @@
 version: '2'
 services:
+
+# Web Layer
     nginx:
         image: nginx:latest
         #image: tutum/nginx
@@ -15,6 +17,7 @@ services:
             - ./nginx/ssl:/etc/nginx/ssl/
             - ./logs/nginx:/var/log/nginx
 
+# BackEnd Layer
     phpfpm:
         build: .
         restart: always
@@ -23,6 +26,7 @@ services:
         volumes:
             - ./www:/usr/share/nginx/html
 
+# DB Layer
     mysql:
       image: mysql:5.7
       volumes:
@@ -32,6 +36,7 @@ services:
       environment:
         MYSQL_ROOT_PASSWORD: toor
 
+# External App Layer
     phpmyadmin:
       image: phpmyadmin/phpmyadmin
       restart: always
