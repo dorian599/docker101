@@ -1,0 +1,47 @@
+version: '2'
+services:
+    nginx:
+        image: nginx:latest
+        #image: tutum/nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - phpfpm
+        depends_on:
+            - phpfpm
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d/
+            - ./nginx/ssl:/etc/nginx/ssl/
+            - ./logs/nginx:/var/log/nginx
+
+    phpfpm:
+        build: .
+        restart: always
+        links:
+            - mysql
+        volumes:
+            - ./www:/usr/share/nginx/html
+
+    mysql:
+      image: mysql:5.7
+      volumes:
+        - ./mysql/data:/var/lib/mysql
+        # - ./logs/mysql:/var/log/mysql
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: toor
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      restart: always
+      links:
+        - mysql
+      depends_on:
+        - mysql
+      ports:
+        - 8183:80
+      environment:
+        MYSQL_USERNAME: admin
+        MYSQL_ROOT_PASSWORD: toor
+        PMA_ARBITRARY: 1
