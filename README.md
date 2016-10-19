@@ -1,2 +1,2 @@
 
-Enter into any folder and execute "docker-compose up -d"
+Enter into any folder and execute this "docker-compose up -d"
